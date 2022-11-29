@@ -1,0 +1,71 @@
+D_AGENT_MAJOR_VERSION=7 DD_API_KEY=2094cd0af2a766bfcfb1ca8418349555 DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
+1. DD_AGENT_MAJOR_VERSION=7 DD_API_KEY="2094cd0af2a766bfcfb1ca8418349555" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)" 
+
+
+
+2. /etc/datadog-agent/datadog.yaml
+
+process_config:
+  process_collection:
+    enabled: true
+    
+logs_enabled: true
+listeners:
+  - name: docker
+config_providers:
+  - name: docker
+    polling: true
+logs_config:
+  container_collect_all: true
+  
+inventories_configuration_enabled: true   
+
+
+  
+
+3. /etc/datadog-agent/system-probe.yaml
+
+network_config:   # use system_probe_config for Agent's older than 7.24.1
+  ## @param enabled - boolean - optional - default: false
+  ## Set to true to enable Network Performance Monitoring.
+  #
+  enabled: true
+
+
+
+
+4. Add the user running the Agent to docker's group.
+
+usermod -a -G docker dd-agent
+usermod -a -G systemd-journal dd-agent
+
+5. Configure the Agent to connect to Docker
+   Edit conf.d/docker.d/docker_daemon.yaml
+
+init_config:
+
+instances:
+    - url: "unix://var/run/docker.sock"
+      new_tag_names: true
+      
+      
+      
+6. Then add this configuration block to your journald.d/conf.yaml file to start collecting your Logs:
+
+logs:
+    - type: journald
+      container_mode: false      
+      
+      
+
+6. Restart the Agent
+
+sudo service datadog-agent restart
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+sudo datadog-agent status
+
+sudo hostnamectl set-hostname
+
