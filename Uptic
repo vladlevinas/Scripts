@@ -1,0 +1,30 @@
+uptickd tx staking create-validator \
+  --amount 5000000000000000000auptick \
+  --from $WALLET \
+  --commission-max-change-rate "0.01" \
+  --commission-max-rate "0.2" \
+  --commission-rate "0.07" \
+  --min-self-delegation "1" \
+  --pubkey  $(uptickd tendermint show-validator) \
+  --moniker VladUptic \
+  --chain-id $UPTICK_CHAIN_ID \
+  --gas=auto
+  
+  
+  uptickd tx staking edit-validator \
+  --moniker=VladCrypto \
+  --identity=7E8A8D3A97BF293C \
+  --website="https://vladcrypto.webnode.co.uk" \
+  --details="Testnet/mainnet validators, node runners, ambasadors. Data mining, Statistic, Business Intelligence." \
+  --chain-id=$UPTICK_CHAIN_ID \
+  --from=$WALLET \
+  --gas=auto
+  
+  
+   uptickd tx staking delegate uptickvaloper10p7dhpzr98s73zrpahl5rhx2kgau0sl6xfq2y3 200000000000000000000auptick --from=uptick10p7dhpzr98s73zrpahl5rhx2kgau0sl64347ga --chain-id=uptick_7000-1 --gas=auto --fees 500000auptick
+   uptickd tx distribution withdraw-rewards uptickvaloper10p7dhpzr98s73zrpahl5rhx2kgau0sl6xfq2y3 --from=uptick10p7dhpzr98s73zrpahl5rhx2kgau0sl64347ga --commission --chain-id=uptick_7000-1 --gas=auto --fees 5000auptick
+   
+uptickd tx slashing unjail \
+    --from=wallet \
+  --chain-id=$UPTICK_CHAIN_ID \
+  --fees 5000auptick
